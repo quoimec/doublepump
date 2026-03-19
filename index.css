@@ -6,18 +6,23 @@
 
 body {
   font-family: -apple-system, "Helvetica Neue", Arial, sans-serif;
-  background: #f4f7f6;
+  background: #0c4b57;
   color: #222;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   min-height: 100vh;
   text-align: center;
-  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.hero {
+  background: #f4f7f6;
+  padding-bottom: 3rem;
 }
 
 main {
   max-width: 480px;
+  margin: 0 auto;
+  padding-top: 4rem;
 }
 
 .logo {
@@ -41,7 +46,7 @@ p {
 .divider {
   width: 40px;
   height: 2px;
-  background: #2a7f8f;
+  background: #0c4b57;
   margin: 2rem auto;
 }
 
@@ -55,4 +60,106 @@ p {
 
 .contact a:hover {
   text-decoration: underline;
+}
+
+/* Portfolio */
+
+.portfolio {
+  background: #0c4b57;
+  padding: 3rem 2rem;
+  margin-top: 4rem;
+}
+
+.portfolio h2 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 1.5rem;
+}
+
+.portfolio-grid {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.portfolio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 0.75rem;
+}
+
+.portfolio-thumb {
+  aspect-ratio: 1;
+  width: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.portfolio-thumb:hover {
+  opacity: 0.8;
+}
+
+/* Lightbox */
+
+.lightbox {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+}
+
+.lightbox.active {
+  display: flex;
+}
+
+.lightbox-img {
+  max-width: 90vw;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 4px;
+}
+
+.lightbox-close,
+.lightbox-prev,
+.lightbox-next {
+  position: fixed;
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 2rem;
+  padding: 0.5rem;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.lightbox-close:hover,
+.lightbox-prev:hover,
+.lightbox-next:hover {
+  opacity: 1;
+}
+
+.lightbox-close {
+  top: 1rem;
+  right: 1.5rem;
+  font-size: 2.5rem;
+}
+
+.lightbox-prev {
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 3rem;
+}
+
+.lightbox-next {
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 3rem;
 }

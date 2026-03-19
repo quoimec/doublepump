@@ -7,13 +7,29 @@
   <link rel="stylesheet" href="index.css">
 </head>
 <body>
-  <main>
+  <div class="hero">
+    <main>
     <img src="logo.png" alt="Double Pump Plumbing and Building" class="logo">
     <h1>Website Under Construction</h1>
     <p>We're building something new. In the meantime, give us a call.</p>
     <div class="divider"></div>
     <p class="contact"><a href="tel:0422072917">0422 072 917</a></p>
-    <p class="contact"><a href="mail:bryce@dbbp.com.au">bryce@dppb.com.au</a></p>
+    <p class="contact"><a href="mailto:bryce@dppb.com.au">bryce@dppb.com.au</a></p>
   </main>
+  </div>
+
+  <section class="portfolio">
+    <h2>Portfolio</h2>
+    <div class="portfolio-grid" id="portfolio-grid"></div>
+  </section>
+
+  <div class="lightbox" id="lightbox">
+    <button class="lightbox-close" id="lightbox-close">&times;</button>
+    <button class="lightbox-prev" id="lightbox-prev">&#8249;</button>
+    <button class="lightbox-next" id="lightbox-next">&#8250;</button>
+    <img class="lightbox-img" id="lightbox-img" alt="Portfolio image">
+  </div>
+
+  <script src="index.js"></script>
 </body>
 </html>
