@@ -1,0 +1,382 @@
+:root {
+  --page-bg: #0B4B57;
+  --header-bg: #F9F6F3;
+
+  /* Logo sizing: large at top, small when scrolled (height-based) */
+  --logo-max: 120px;     /* logo height on page load */
+  --logo-min: 60px;      /* logo height when scrolled */
+  --header-pad-max: 10px;  /* header vertical padding at top */
+  --header-pad-min: 10px;  /* header vertical padding when scrolled */
+
+  /* Hero */
+  --hero-max-h: 620px;   /* cap on wide screens; image crops to fill */
+
+  /* Scroll position (px) at which the header switches to its compact state */
+  --shrink-distance: 70px;
+
+  /* Container component */
+  --container-bg: #ffffff;
+  --container-radius: 2px;
+  --header-color: #06272D;
+  --underline-color: #A8C0C4;
+  --body-color: #06272D;
+  --font-serif: Georgia, 'Times New Roman', serif;
+  --font-sans: 'Helvetica Neue', Arial, sans-serif;
+
+  /* Section / external padding */
+  --container-max: 1000px;                       /* cap width; beyond this, side padding grows */
+  --section-pad-x-min: clamp(16px, 5%, 40px);    /* side padding below the cap */
+  --overlap: 72px;                               /* how far the container rises into the hero */
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--header-bg);
+  font-family: Georgia, serif;
+  min-height: 200vh; /* scroll room for demo; remove once the page has real content */
+  overflow-anchor: none;
+}
+
+/* ---- Header ---- */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--header-bg);
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;  /* hamburger | logo | spacer */
+  align-items: center;
+  padding: var(--header-pad-max) 24px;
+  transition: padding 0.25s ease;       /* animates the single state change */
+}
+.site-header.is-scrolled { padding-block: var(--header-pad-min); }
+
+.hamburger {
+  grid-column: 1;
+  justify-self: start;
+  opacity: 0;                          /* fades in once scrolled */
+  transition: opacity 0.25s ease;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.site-header.is-scrolled .hamburger { opacity: 1; }
+.hamburger span {
+  display: block;
+  width: 30px;
+  height: 4px;
+  background: #06272D;
+  border-radius: 1px;
+}
+
+.logo {
+  /* grid-column: 1 / -1;             /* span full width so the hamburger can't shift it */ */
+  justify-self: center;            /* centred on the whole header, not the middle cell */
+  position: relative;
+  z-index: 1;                      /* sit above the hamburger where they overlap */
+  pointer-events: none;            /* let taps fall through to the hamburger beneath */
+  height: var(--logo-max);
+  width: auto;
+  display: block;
+  transition: height 0.25s ease;   /* animates the single state change */
+}
+.site-header.is-scrolled .logo { height: var(--logo-min); }
+
+/* ---- Hero ---- */
+.hero {
+  width: 100%;
+  max-height: var(--hero-max-h);
+  /* On tall/narrow it scales by ratio; on wide it caps and crops */
+  aspect-ratio: 928 / 620;
+  object-fit: cover;     /* center-crop to fill the box */
+  object-position: center;
+  display: block;
+}
+/* Above the cap, lock to max-height and let object-fit crop the sides */
+@media (min-aspect-ratio: 928/620) {
+  .hero { height: var(--hero-max-h); aspect-ratio: auto; }
+}
+
+/* ---- Section (teal; holds one or more containers) ----
+   Background starts flush at the hero bottom; only the container
+   overlaps upward into the hero. */
+.section {
+  background: var(--page-bg);
+  scroll-margin-top: 96px;   /* keep anchored sections clear of the sticky header */
+  padding-inline: max(var(--section-pad-x-min), (100% - var(--container-max)) / 2);
+  padding-bottom: 64px;   /* space below; future containers stack here */
+}
+
+/* ---- Container component ---- */
+.container {
+  position: relative;     /* paint above the hero where it overlaps */
+  z-index: 1;
+  background: var(--container-bg);
+  border-radius: var(--container-radius);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  padding: 20px 20px;
+}
+/* Lift the first container into the hero */
+.container--overlap { margin-top: calc(var(--overlap) * -1); }
+/* Gap between stacked containers (applies to all but the first) */
+.container + .container { margin-top: 32px; }
+
+.container__header {
+  display: inline-block;   /* collapses width to text so the underline can match */
+  margin-left: 4px;
+}
+.container__header h1 {
+  color: var(--header-color);
+  font-family: var(--font-serif);
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 1;
+}
+.container__header::after {
+  content: "";
+  display: block;
+  height: 4px;
+  width: calc(100% - 20px);  /* tracks text width, minus a fixed 30px */
+  background: var(--underline-color);
+  margin-top: 14px;
+}
+
+.container__content { margin-top: 14px; }
+.container__content p {
+  color: var(--body-color);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 1.2;
+  margin-left: 6px;
+}
+/* Italic intro variant */
+.container__content p.is-italic { 
+  font-style: italic; 
+  opacity: 0.6;
+}
+
+/* ---- Gallery grid ----
+   Columns auto add/remove based on the CONTAINER width (auto-fill).
+   Each tile is a flexible 1:1 square. */
+.gallery {
+  margin-top: 36px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));  /* mobile */
+  gap: 12px;
+}
+@media (min-width: 768px) {
+  .gallery { 
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));  /* desktop */
+  }   
+}
+
+.gallery__item {
+  margin: 0;
+  cursor: pointer;
+}
+.gallery__img {
+  width: 100%;
+  aspect-ratio: 1 / 1;       /* always square; size flexes with the column */
+  object-fit: cover;
+  display: block;
+  background: #d6d6d6;       /* placeholder tone while loading */
+  border-radius: 2px;
+}
+
+/* ---- Projects (project-card variant) ----
+   Each card: a hero image with an overlapping cream caption block.
+   Tapping the card opens the photo viewer on that project's gallery. */
+.project {
+  position: relative;
+  cursor: pointer;
+  margin-top: 30px;
+  padding-bottom: 10px;
+}
+.project + .project { margin-top: 56px; }
+
+.project__img {
+  display: block;
+  width: calc(100% - 10px);
+  aspect-ratio: 16 / 10;        /* uniform card height; crops to fill */
+  object-fit: cover;
+  border-radius: 2px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.22);
+}
+
+.project__card {
+  position: relative;
+  z-index: 2;
+  width: 82%;
+  margin-left: auto;            /* offset toward the right, as in the mock */
+  margin-top: -60px;            /* overlap the bottom of the image */
+  background: var(--header-bg);
+  border-radius: 2px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  padding: 22px 26px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.project__text { flex: 1; min-width: 0; }
+.project__name {
+  color: var(--header-color);
+  font-family: var(--font-serif);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+.project__desc {
+  margin-top: 6px;
+  color: var(--body-color);
+  opacity: 0.6;
+  font-family: var(--font-sans);
+  font-style: italic;
+  font-size: 14px;
+  line-height: 1.25;
+}
+.project__plus {
+  flex: none;
+  color: #9aa6a8;
+  font-size: 40px;
+  line-height: 1;
+  font-family: var(--font-sans);
+}
+
+/* ---- Side menu + scrim ---- */
+.scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 150;
+  background: rgba(6, 16, 18, 0.5);   /* darkens the page content */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+.scrim.is-open { opacity: 1; visibility: visible; }
+
+.side-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 160;
+  height: 100%;
+  width: min(280px, 80%);
+  background: var(--header-bg);
+  padding: 80px 0 24px;          /* clear the header area at the top */
+  transform: translateX(-100%);  /* hidden off the left edge */
+  transition: transform 0.28s ease;
+  overflow-y: auto;
+}
+/* Shadow only while open — otherwise it bleeds onto the page when parked. */
+.side-menu.is-open {
+  transform: translateX(0);
+  box-shadow: 2px 0 24px rgba(0, 0, 0, 0.2);
+}
+
+.side-menu__list { list-style: none; }
+.side-menu__link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 28px;
+  color: var(--header-color);
+  font-family: var(--font-serif);
+  font-size: 22px;
+  font-weight: 700;
+  text-decoration: none;
+}
+.side-menu__link::before {
+  content: "\25C6";          /* ◆ leading diamond */
+  color: var(--underline-color);
+  font-size: 11px;
+  line-height: 1;
+}
+.side-menu__link:hover { background: rgba(6, 39, 45, 0.06); }
+
+/* ---- Project gallery (full-screen darkened grid overlay) ---- */
+.project-gallery {
+  position: fixed;
+  inset: 0;
+  z-index: 95;                         /* below the lightbox (100) */
+  background: rgba(6, 16, 18, 0.93);
+  display: none;
+  overflow-y: auto;
+}
+.project-gallery.is-open { display: block; }
+.project-gallery__inner {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 72px 20px 40px;
+}
+.project-gallery__inner .gallery { margin-top: 0; }
+.project-gallery__close {
+  position: fixed;
+  top: 8px;
+  right: 12px;
+  z-index: 96;
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  font-size: 2rem;
+  line-height: 1;
+  padding: 16px;
+  opacity: 0.85;
+}
+.project-gallery__close:hover { opacity: 1; }
+
+/* ---- Lightbox / photo viewer ---- */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(6, 16, 18, 0.93);
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.lightbox.is-open { display: flex; }
+.lightbox__figure {
+  margin: 0;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.lightbox__img {
+  max-width: 88vw;
+  max-height: 80vh;
+  object-fit: contain;
+  border-radius: 2px;
+}
+.lightbox__caption {
+  margin-top: 16px;
+  max-width: 80vw;
+  text-align: center;
+  color: #fff;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.4;
+}
+.lightbox__btn {
+  position: absolute;
+  background: none;
+  border: none;
+  color: #fff;
+  cursor: pointer;
+  padding: 16px;
+  font-size: 2.5rem;
+  line-height: 1;
+  opacity: 0.8;
+}
+.lightbox__btn:hover { opacity: 1; }
+.lightbox__btn--prev { left: 8px;  top: 50%; transform: translateY(-50%); }
+.lightbox__btn--next { right: 8px; top: 50%; transform: translateY(-50%); }
+.lightbox__btn--close { top: 8px; right: 12px; font-size: 2rem; }

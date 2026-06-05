@@ -1,35 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Double Pump Plumbing & Building</title>
-  <link rel="stylesheet" href="index.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Double Pump</title>
+<link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-  <div class="hero">
-    <main>
-    <img src="logo.png" alt="Double Pump Plumbing and Building" class="logo">
-    <h1>Website Under Construction</h1>
-    <p>We're building something new. In the meantime, give us a call.</p>
-    <div class="divider"></div>
-    <p class="contact"><a href="tel:0422072917">0422 072 917</a></p>
-    <p class="contact"><a href="mailto:bryce@dppb.com.au">bryce@dppb.com.au</a></p>
-  </main>
-  </div>
 
-  <section class="portfolio">
-    <h2>Portfolio</h2>
-    <div class="portfolio-grid" id="portfolio-grid"></div>
+  <!-- Slide-out menu + darkening scrim (list built by js/main.js) -->
+  <div class="scrim" id="scrim"></div>
+  <nav class="side-menu" id="side-menu" aria-label="Site menu" aria-hidden="true">
+    <ul class="side-menu__list" id="side-menu-list"></ul>
+  </nav>
+
+  <header class="site-header" id="header">
+    <button class="hamburger" id="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="side-menu">
+      <span></span><span></span><span></span>
+    </button>
+
+    <img class="logo" src="resources/logo.png" alt="Double Pump Plumbing and Building">
+
+    <div></div><!-- spacer to balance the grid -->
+  </header>
+
+  <img class="hero" src="resources/hero.png" alt="Double Pump tradesperson at work">
+
+  <!-- <section class="section">
+    <div class="container container--overlap">
+      <div class="container__header">
+        <h1>About</h1>
+      </div>
+      <div class="container__content">
+        <p>Lorem ipsum blah blah blah blah blasdalsd als dasjkld askjd sakj dakj dsakjd akjsda sdj</p>
+      </div>
+    </div>
+  </section> -->
+
+  <section class="section">
+    <div class="container container--overlap">
+      <div class="container__header">
+        <h1>Recent Projects</h1>
+      </div>
+      <div class="container__content">
+        <!-- data-src points at the projects base dir; it must contain projects.json (see js/main.js). -->
+        <div class="projects" data-src="resources/Projects"></div>
+      </div>
+    </div>
   </section>
 
-  <div class="lightbox" id="lightbox">
-    <button class="lightbox-close" id="lightbox-close">&times;</button>
-    <button class="lightbox-prev" id="lightbox-prev">&#8249;</button>
-    <button class="lightbox-next" id="lightbox-next">&#8250;</button>
-    <img class="lightbox-img" id="lightbox-img" alt="Portfolio image">
+  <section class="section">
+    <div class="container">
+      <div class="container__header">
+        <h1>Bathrooms</h1>
+      </div>
+      <div class="container__content">
+        <p class="is-italic">We specialise in bathroom renovations & reworks.</p>
+        <!-- data-src points at the folder; it must contain images.json (see js/main.js). -->
+        <div class="gallery" data-src="resources/Bathrooms"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="container__header">
+        <h1>Other Work</h1>
+      </div>
+      <div class="container__content">
+        <p class="is-italic">A selection of other smaller projects we've completed over time.</p>
+        <!-- data-src points at the folder; it must contain images.json (see js/main.js). -->
+        <div class="gallery" data-src="resources/Gallery"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Full-screen project gallery overlay (grid built by js/main.js) -->
+  <div class="project-gallery" id="project-gallery" aria-hidden="true">
+    <button class="project-gallery__close" aria-label="Close gallery">&times;</button>
+    <div class="project-gallery__inner">
+      <div class="gallery" id="project-gallery-grid"></div>
+    </div>
   </div>
 
-  <script src="index.js"></script>
+  <!-- Shared photo viewer (one instance serves every gallery) -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox__btn lightbox__btn--close" aria-label="Close">&times;</button>
+    <button class="lightbox__btn lightbox__btn--prev"  aria-label="Previous">&#8249;</button>
+    <figure class="lightbox__figure">
+      <img class="lightbox__img" id="lightbox-img" alt="">
+      <figcaption class="lightbox__caption" id="lightbox-caption"></figcaption>
+    </figure>
+    <button class="lightbox__btn lightbox__btn--next" aria-label="Next">&#8250;</button>
+  </div>
+
+  <main></main>
+
+  <script src="js/main.js"></script>
 </body>
 </html>
